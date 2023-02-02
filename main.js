@@ -18,15 +18,7 @@ Vue.component("product", {
                 <p v-if="inStock">In Stock</p>
                 <p v-else>Out Of Stock</p>
 
-                <p>Shipping: {{ shipping }}</p>
-
-                <!-- <p v-if="inventory > 10">In Stock</p>
-                <p v-else-if="inventory <=10 && inventory >0">Almost sold out!</p>
-                <p v-else>Out of Stock</p> -->
-
-                <ul>
-                    <li v-for="(detail, index) in details" :key="index">{{ detail }}</li>
-                </ul>
+                <info-tabs :shipping="shipping" :details="details"></info-tabs>
 
                 <div v-for="(variant, index) in variants"
                     :key="variant.variantId"
@@ -129,6 +121,16 @@ Vue.component('product-review', {
                 </select>
             </p>
 
+            <p>Would you recommend this product?</p>
+            <label>
+                Yes
+                <input type="radio" value="Yes" v-model="recommend"/>
+            </label>
+            <label>
+                No
+                <input type="radio" value="No" v-model="recommend"/>
+            </label>
+
             <p>
                 <input type="submit" value="Submit"/>
             </p>
@@ -140,25 +142,29 @@ Vue.component('product-review', {
             name: null,
             review: null,
             rating: null,
+            recommend: null,
             errors: []
         }
     },
     methods: {
         onSubmit() {
-            if (this.name && this.review && this.rating) {
+            if (this.name && this.review && this.rating && this.recommend) {
                 let productReview = {
                     name: this.name,
                     review: this.review,
-                    rating: this.rating
+                    rating: this.rating,
+                    recommend: this.recommend
                 }
                 eventBus.$emit('review-submitted', productReview)
                 this.name = null
                 this.review = null
                 this.rating = null
+                this.recommend = null
             } else {
                 if (!this.name) this.errors.push("Name required.")
                 if (!this.review) this.errors.push("Review required.")
                 if (!this.rating) this.errors.push("Rating required.")
+                if (!this.recommend) this.errors.push("Recommendation required.")
             }
         }
     }
@@ -184,6 +190,7 @@ Vue.component('product-tabs', {
                         <p>{{ review.name }}</p>
                         <p>Rating: {{ review.rating }}</p>
                         <p>{{ review.review }}</p>
+                        <p>Recommend: {{ review.recommend }}</p>
                     </li>
                 </ul>
             </div>
@@ -198,7 +205,46 @@ Vue.component('product-tabs', {
             selectedTab: 'Reviews'
         }
     },
-})
+});
+
+Vue.component('info-tabs', {
+    props: {
+        shipping: {
+            required: true
+        },
+        details: {
+            type: Array,
+            required: true
+        }
+    },
+    template: `
+        <div>
+            <ul>
+                <span class="tabs" :class="{ activeTab: selectedTab === tab }" v-for="(tab, index) in tabs" @click="selectedTab = tab" :key="tab">
+                    {{ tab }}
+                </span>
+            </ul>
+            <div v-show="selectedTab === 'Shipping'">
+                <p>
+                    {{ shipping }}
+                </p>
+            </div>
+            <div v-show="selectedTab === 'Details'">
+                <ul>
+                    <li v-for="detail in details">
+                        {{ detail }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    `,
+    data() {
+        return {
+            tabs: ['Shipping', 'Details'],
+            selectedTab: 'Shipping'
+        }
+    },
+});
 
 var app = new Vue({
     el: '#app',
