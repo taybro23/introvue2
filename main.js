@@ -5,7 +5,7 @@ var app = new Vue({
     description: 'Cool Socks',
     image: './assets/g-socks.jpeg',
     link: 'https://www.amazon.com',
-    inventory: 100,
+    inventory: 110,
     onSale: true,
     details: ['80% cotton', '20% polyester', 'Gender-neutral'],
     variants: [
@@ -30,11 +30,6 @@ var app = new Vue({
     removeFromCart() {
       if (this.cart > 0) {
         this.cart -= 1
-      }
-    },
-    cartNumber() {
-      if (this.cart === 0) {
-        return 'disabled'
       }
     },
     updateProduct(variantImage) {
