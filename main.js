@@ -11,13 +11,34 @@ var app = new Vue({
     variants: [
       {
         variantId: 2234,
-        variantColour: 'green'
+        variantColour: 'green',
+        variantImage: './assets/g-socks.jpeg'
       },
       {
         variantId: 2235,
-        variantColour: 'blue'
+        variantColour: 'blue',
+        variantImage: './assets/b-socks.jpeg'
       },
     ],
-    sizes: ['XS', 'S', 'M', 'L', 'XL']
+    sizes: ['XS', 'S', 'M', 'L', 'XL'],
+    cart: 0
+  },
+  methods: {
+    addToCart() {
+      this.cart += 1
+    },
+    removeFromCart() {
+      if (this.cart > 0) {
+        this.cart -= 1
+      }
+    },
+    cartNumber() {
+      if (this.cart === 0) {
+        return 'disabled'
+      }
+    },
+    updateProduct(variantImage) {
+      this.image = variantImage
+    }
   }
 })
