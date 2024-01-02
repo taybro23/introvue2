@@ -1,7 +1,9 @@
 var app = new Vue({
   el: '#app',
   data: {
-    product: "socks",
-    description: "Cool Socks"
+    product: 'Socks',
+    description: 'Cool Socks',
+    image: './assets/g-socks.jpeg',
+    link: 'https://www.amazon.com'
   }
 })
